@@ -211,6 +211,20 @@ function updateRangeHighlight() {
   });
 }
 
+const MONTH_PRICE = 15000;
+const TWO_WEEK_PRICE = 10000;
+const TEN_DAY_PRICE = 8000;
+const WEEK_PRICE = 5000;
+const DAY_PRICE = 1000;
+
+function calculateCost(dayCount) {
+  if(dayCount>=30) return MONTH_PRICE * Math.floor(dayCount/30) + calculateCost(dayCount%30);
+  if(dayCount>=14) return TWO_WEEK_PRICE + calculateCost(dayCount-14);
+  if(dayCount>=10) return TEN_DAY_PRICE + calculateCost(dayCount-10);
+  if(dayCount>=7)  return WEEK_PRICE + calculateCost(dayCount-7);
+  return dayCount*DAY_PRICE;
+}
+
 function openRangeModal(startStr, endStr) {
   const bookings = getBookings();
   const names = prompt(`選択範囲 ${startStr} 〜 ${endStr} を予約します。名前を入力してください (カンマ区切り)`);
@@ -222,8 +236,8 @@ function openRangeModal(startStr, endStr) {
   let eDate = new Date(endStr);
   if (sDate > eDate) [sDate, eDate] = [eDate, sDate];
   const dayCount = Math.round((eDate - sDate) / (1000 * 60 * 60 * 24)) + 1;
-  const totalCost = dayCount * 1000;
-  if (!confirm(`宿泊料金：${dayCount}泊 × 1000THB = ${totalCost}THB\nOKで予約を確定しますか？`)) return;
+  const totalCost = calculateCost(dayCount);
+  if (!confirm(`宿泊料金：${dayCount}泊 × ${totalCost}THB\nOKで予約を確定しますか？`)) return;
 
   let iter = new Date(sDate);
   while (iter <= eDate) {
