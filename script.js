@@ -135,9 +135,12 @@ function openModal(dateStr) {
     bookings[dateStr] = bookings[dateStr] || [];
     if (bookings[dateStr].length >= 4) return alert("満室です");
 
+    // 費用確認ポップアップ（OK / キャンセル）
+    if (!confirm("宿泊料金：1泊1000THB\nOKで予約を確定しますか？")) return;
+
     bookings[dateStr].push(name);
     saveBookings(bookings);
-    alert("宿泊料金：1泊1000THB\nご確認ください。※現地支払い");
+    alert("ご確認ください。※現地支払い");
     closeModal();
     renderCalendar(currentDate);
   };
@@ -213,10 +216,17 @@ function openRangeModal(startStr, endStr) {
   const names = prompt(`選択範囲 ${startStr} 〜 ${endStr} を予約します。名前を入力してください (カンマ区切り)`);
   if (!names) return;
   const nameArr = names.split(/,|、/).map((n) => n.trim()).filter(Boolean);
-  let iter = new Date(startStr);
-  let endDate = new Date(endStr);
-  if (iter > endDate) [iter, endDate] = [endDate, iter];
-  while (iter <= endDate) {
+
+  // 期間の泊数計算
+  let sDate = new Date(startStr);
+  let eDate = new Date(endStr);
+  if (sDate > eDate) [sDate, eDate] = [eDate, sDate];
+  const dayCount = Math.round((eDate - sDate) / (1000 * 60 * 60 * 24)) + 1;
+  const totalCost = dayCount * 1000;
+  if (!confirm(`宿泊料金：${dayCount}泊 × 1000THB = ${totalCost}THB\nOKで予約を確定しますか？`)) return;
+
+  let iter = new Date(sDate);
+  while (iter <= eDate) {
     const y = iter.getFullYear();
     const m = iter.getMonth() + 1;
     const d = iter.getDate();
