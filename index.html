@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>シェアハウス宿泊予約</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>シェアハウス宿泊予約</h1>
+      <a href="finances.html" class="admin-link" style="right:5rem;top:1rem;">収支ページ</a>
+      <a href="cancel.html" class="admin-link" style="right:10rem;top:1rem;">キャンセル管理</a>
+      <div class="month-nav">
+        <button id="prevMonth">◀</button>
+        <h2 id="monthYear"></h2>
+        <button id="nextMonth">▶</button>
+        <button id="todayBtn">今日</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="week-headers">
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+      </div>
+      <div id="calendar" class="calendar-grid"></div>
+    </main>
+
+    <!-- モーダル -->
+    <div id="modal" class="modal hidden">
+      <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <h3 id="selectedDate"></h3>
+        <p id="bookingInfo"></p>
+        <label for="userName">名前:</label>
+        <input type="text" id="userName" placeholder="例: 山田" />
+        <label for="nameSelect">キャンセル対象:</label>
+        <select id="nameSelect"></select>
+        <div class="modal-buttons">
+          <button id="reserveBtn">予約</button>
+          <button id="cancelBtn">キャンセル</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 追加: 情報タブセクション -->
+    <section id="info-section">
+      <div class="tabs">
+        <div class="tab-buttons">
+          <button class="tab-button active" data-target="stay-fee">宿泊料金</button>
+          <button class="tab-button" data-target="payment">支払い方法</button>
+          <button class="tab-button" data-target="details">シェアハウス詳細</button>
+          <button class="tab-button" data-target="checkin">チェックイン方法</button>
+          <button class="tab-button" data-target="official">T78公式サイト</button>
+        </div>
+        <div class="tab-contents">
+          <div id="stay-fee" class="tab-content active">
+            <h2>👇 宿泊料金</h2>
+            <ul>
+              <li><strong>● 1ヶ月：</strong>17,000 THB</li>
+              <li><strong>● 1週間：</strong>5,000 THB</li>
+              <li><strong>● 1日：</strong>1,000 THB</li>
+            </ul>
+          </div>
+          <div id="payment" class="tab-content">
+            <h2>👇 支払い方法</h2>
+            <p>現金、クレカ、Wise、銀行振込（当日現地にてお支払いいただきます）</p>
+          </div>
+          <div id="details" class="tab-content">
+            <h2>シェアハウス詳細 ✍️</h2>
+            <h3>住所</h3>
+            <p><strong>📍 Hasu Haus</strong><br>
+              住所：Hasu HAUS CONDOMINIUM, Sukhumvit 77, Prakanong Nua, Wattana, Bangkok, 10110, THAILAND<br>
+              ▶︎ <a href="https://maps.app.goo.gl/wtPMr14mPk3yuDsdA" target="_blank">Googleマップはこちら</a>
+            </p>
+            <h3>設備</h3>
+            <ul>
+              <li>Wi-Fi</li>
+              <li>ダブルベット2台</li>
+              <li>冷蔵庫</li>
+              <li>電子レンジ</li>
+              <li>食器</li>
+              <li>シャワー</li>
+              <li>トイレ</li>
+              <li>洗面台</li>
+              <li>ドライヤー</li>
+              <li>洗濯機</li>
+              <li>プール、ジム、コワーキングスペース</li>
+            </ul>
+          </div>
+          <div id="checkin" class="tab-content">
+            <h2>チェックイン方法 / ハウスルール</h2>
+            <h3>チェックイン方法</h3>
+            <ol>
+              <li>メールボックス「Room no. 111/120」から鍵を取り出す or 入居人に連絡</li>
+              <li>エレベーターで6階にいく（A棟 / ロビーの上の棟）</li>
+              <li>111/120の鍵を開けて入室</li>
+            </ol>
+            <p>※他に住人がいる場合は、連絡を取りつつ臨機応変に対応</p>
+            <h3>⚠️ ハウスルール</h3>
+            <ul>
+              <li>連絡事項は全てDiscordでお願いします。</li>
+              <li>貴重品の管理は各自でお願いします。</li>
+              <li>チェックイン、チェックアウトの時間は自由です。</li>
+            </ul>
+          </div>
+          <div id="official" class="tab-content">
+            <h2>T78公式サイト</h2>
+            <p><a href="https://t77.webflow.io/" target="_blank" rel="noopener">https://t77.webflow.io/</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="script.js"></script>
+  </body>
+</html>

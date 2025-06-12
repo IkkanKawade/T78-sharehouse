@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>キャンセル管理</title><link rel="stylesheet" href="styles.css"/>
+<style>
+.container{max-width:700px;margin:2rem auto}
+select,button{margin:0.5rem 0}
+.table-wrapper{max-height:400px;overflow:auto}
+</style></head>
+<body>
+<h1 style="text-align:center">キャンセル管理</h1>
+<a href="index.html">← カレンダーへ戻る</a>
+<div class="container">
+  <label for="monthSelect">月を選択:</label>
+  <select id="monthSelect"></select>
+  <div class="table-wrapper">
+    <table id="bookTable" style="width:100%;border-collapse:collapse">
+      <thead><tr><th>日付</th><th>名前</th><th>選択</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <button id="cancelSelected">選択した予約をキャンセル</button>
+</div>
+<script>
+const STORAGE_KEY="sharehouse_bookings";
+// populate 2025-06 から 1年
+(()=>{const sel=document.getElementById('monthSelect');for(let i=0;i<12;i++){const d=new Date(2025,5+i,1);const val=`${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}`;const opt=document.createElement('option');opt.value=val;opt.textContent=val;sel.appendChild(opt);}})();
+
+const render=()=>{const monthStr=document.getElementById('monthSelect').value;const [y,m]=monthStr.split('-').map(Number);const tbody=document.querySelector('#bookTable tbody');tbody.innerHTML='';const bookings=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');for(let d=1;d<=31;d++){const key=`${y}-${m}-${d}`;if(bookings[key]){bookings[key].forEach(name=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${d}</td><td>${name}</td><td><input type='checkbox' data-key='${key}' data-name='${name}'></td>`;tbody.appendChild(tr);});}}
+};
+
+document.getElementById('monthSelect').onchange=render;render();
+
+document.getElementById('cancelSelected').onclick=()=>{const checks=[...document.querySelectorAll('input[type="checkbox"]:checked')];if(!checks.length)return alert('選択なし');let bookings=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');checks.forEach(c=>{const key=c.dataset.key;const n=c.dataset.name;bookings[key]=bookings[key].filter(x=>x!==n);if(!bookings[key].length)delete bookings[key];});localStorage.setItem(STORAGE_KEY,JSON.stringify(bookings));alert('キャンセルしました');render();};
+</script>
+</body></html>
